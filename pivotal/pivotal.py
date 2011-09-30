@@ -57,7 +57,57 @@ class Pivotal(object):
         response, content = self.get()
         return etree.fromstring(content)
 
-    def post(self, body):
-        # TODO: Flesh out POSTs
-        raise NotImplementedError
+    def post(self, body=None):
+        """
+        POST using url parameters
 
+        # TODO: Support POST using body
+        """
+        h = httplib2.Http(timeout=15)
+        h.force_exception_to_status_code = True
+        headers = {
+            'X-TrackerToken': self.token,
+        }
+
+        if body is None:
+            return h.request(self.url, "POST", headers=headers)
+        else:
+            raise NotImplementedError
+
+    def put(self, body=None):
+        """
+        PUT using url parameters
+        Note: Content-Length must be set to 0 when using PUT with URL parameters
+        
+        # TODO: Support PUT using body
+        """
+        h = httplib2.Http(timeout=15)
+        h.force_exception_to_status_code = True
+        headers = {
+            'X-TrackerToken': self.token,
+        }
+
+        if body is None:
+            headers['Content-Length'] = '0'
+            return h.request(self.url, "PUT", headers=headers)
+        else:
+            raise NotImplementedError
+
+    def update(self, type, **kwargs):
+        """
+        Update querystring according using a subscript notation incorporating
+        the `type` (story, task, label)
+        Necessary to support POST and PUT using url parameters
+
+        e.g.
+        >>> story = pv.project(123).story().update(type='story', name='New Story')
+        >>> story.qs
+        {'story[name]': 'New Story'}
+        
+        """
+        subscripted = {}
+        for k,v in kwargs.items():
+            subscripted['%s[%s]' % (type, k)] = v
+        self.qs.update(subscripted)
+        return self
+    add = update # Alias
