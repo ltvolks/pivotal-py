@@ -35,7 +35,7 @@ class PivotalTest(unittest.TestCase):
 
     def test_update_url_strings(self):
         """
-        Testing multiple `update` kwargs is may fail to do unordered
+        Testing multiple `update` kwargs is may fail due to unordered
         dictionary keys
         """
         pv = Pivotal('ABCDEF', use_https=True)

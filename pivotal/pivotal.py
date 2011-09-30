@@ -100,7 +100,7 @@ class Pivotal(object):
         Necessary to support POST and PUT using url parameters
 
         e.g.
-        >>> story = pv.project(123).story().update(type='story', name='New Story')
+        >>> story = pv.project(123).stories().update(type='story', name='New Story')
         >>> story.qs
         {'story[name]': 'New Story'}
         
